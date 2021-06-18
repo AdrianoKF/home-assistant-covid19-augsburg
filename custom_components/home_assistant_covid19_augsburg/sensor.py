@@ -6,10 +6,10 @@ async def async_setup_entry(hass, _, async_add_entities):
     """Defer sensor setup to the shared sensor module."""
     coordinator = await get_coordinator(hass)
 
-    async_add_entities([CoronaHessenSensor(coordinator)])
+    async_add_entities([CoronaAugsburgSensor(coordinator)])
 
 
-class CoronaHessenSensor(Entity):
+class CoronaAugsburgSensor(Entity):
     """Representation of a county with Corona cases."""
 
     def __init__(self, coordinator):
@@ -20,7 +20,7 @@ class CoronaHessenSensor(Entity):
 
     @property
     def available(self):
-        return self.coordinator.last_update_success in self.coordinator.data
+        return self.coordinator.last_update_success
 
     @property
     def name(self):
