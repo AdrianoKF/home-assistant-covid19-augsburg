@@ -1,12 +1,10 @@
 import datetime
-import locale
 import logging
 import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from bs4 import BeautifulSoup
-from homeassistant import aiohttp_client
 
 _log = logging.getLogger(__name__)
 
@@ -49,6 +47,8 @@ class CovidCrawler(CovidCrawlerBase):
         _log.info("Fetching COVID-19 data update")
 
         if self.hass:
+            from homeassistant.helpers import aiohttp_client
+
             result = await aiohttp_client.async_get_clientsession(self.hass).get(
                 self.url
             )
