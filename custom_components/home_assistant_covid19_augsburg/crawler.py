@@ -127,4 +127,4 @@ class CovidCrawler(CovidCrawlerBase):
         )
         _log.debug(f"Result data: {result}")
 
-        return {}
+        return result
