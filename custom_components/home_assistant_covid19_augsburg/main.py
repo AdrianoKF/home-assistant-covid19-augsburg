@@ -1,4 +1,4 @@
-from home_assistant_covid19_augsburg.crawler import CovidCrawler
+from .crawler import CovidCrawler
 
 
 def main():

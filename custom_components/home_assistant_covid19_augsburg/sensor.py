@@ -1,4 +1,4 @@
-from home_assistant_covid19_augsburg import get_coordinator
+from . import get_coordinator
 from homeassistant.helpers.entity import Entity
 
 

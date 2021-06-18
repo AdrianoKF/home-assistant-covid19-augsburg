@@ -1,4 +1,4 @@
-"""Config flow for Coronavirus Hessen integration."""
+"""Config flow for Coronavirus Augsburg integration."""
 import logging
 
 import voluptuous as vol
@@ -10,7 +10,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Coronavirus Hessen."""
+    """Handle a config flow for Coronavirus Augsburg."""
 
     VERSION = 1
     CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
