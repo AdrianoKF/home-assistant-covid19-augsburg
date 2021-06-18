@@ -11,6 +11,12 @@ from homeassistant import aiohttp_client
 _log = logging.getLogger(__name__)
 
 
+def parse_num(s, t=int):
+    if len(s):
+        return t(s.replace(".", "").replace(",", "."))
+    return 0
+
+
 @dataclass
 class IncidenceData:
     location: str
@@ -29,7 +35,7 @@ class CovidCrawlerBase(ABC):
 
 
 class CovidCrawler(CovidCrawlerBase):
-    def __init__(self, hass) -> None:
+    def __init__(self, hass=None) -> None:
         self.url = (
             "https://www.augsburg.de/umwelt-soziales/gesundheit/coronavirus/fallzahlen"
         )
@@ -42,10 +48,18 @@ class CovidCrawler(CovidCrawlerBase):
 
         _log.info("Fetching COVID-19 data update")
 
-        locale.setlocale(locale.LC_ALL, "de_DE.utf8")
+        if self.hass:
+            result = await aiohttp_client.async_get_clientsession(self.hass).get(
+                self.url
+            )
+            soup = BeautifulSoup(await result.text(), "html.parser")
+        else:
+            import requests
 
-        result = await aiohttp_client.async_get_clientsession(self.hass).get(self.url)
-        soup = BeautifulSoup(await result.text(), features="html.parser")
+            result = requests.get(self.url)
+            if not result.ok:
+                result.raise_for_status()
+            soup = BeautifulSoup(result.text, "html.parser")
 
         match = soup.find(class_="frame--type-textpic")
         text = match.p.text
@@ -55,16 +69,35 @@ class CovidCrawler(CovidCrawlerBase):
         if not matches:
             raise ValueError("Could not extract incidence from scraped web page")
 
-        incidence = locale.atof(matches.group(1))
+        incidence = parse_num(matches.group(1), t=float)
         _log.debug(f"Parsed incidence: {incidence}")
 
         text = match.h2.text
-        matches = re.search(r"\((\d+\. \w+)\)", text)
+        matches = re.search(r"\((\d+)\. (\w+)\)", text)
         if not matches:
             raise ValueError("Could not extract date from scraped web page")
 
-        date = datetime.datetime.strptime(matches.group(1), "%d. %B")
-        date = date.replace(year=datetime.datetime.now().year).date()
+        months = [
+            "Januar",
+            "Februar",
+            "März",
+            "April",
+            "Mai",
+            "Juni",
+            "Juli",
+            "August",
+            "September",
+            "Oktober",
+            "November",
+            "Dezember",
+        ]
+        day = parse_num(matches.group(1))
+        month_name = matches.group(2)
+        date = datetime.date(
+            year=datetime.datetime.now().year,
+            month=1 + months.index(month_name),
+            day=day,
+        )
         _log.debug(f"Parsed date: {date}")
 
         match = match.find_next_sibling(class_="frame--type-textpic")
@@ -83,7 +116,10 @@ class CovidCrawler(CovidCrawlerBase):
             if not matches:
                 continue
             cases.update(
-                {k: int(v.replace(".", "")) for k, v in matches.groupdict().items()}
+                {
+                    k: parse_num(v.replace(".", ""))
+                    for k, v in matches.groupdict().items()
+                }
             )
 
         result = IncidenceData("Augsburg", incidence, date, **cases)
