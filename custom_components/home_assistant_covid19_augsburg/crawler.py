@@ -5,8 +5,8 @@ import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-import requests
 from bs4 import BeautifulSoup
+from homeassistant import aiohttp_client
 
 _log = logging.getLogger(__name__)
 
@@ -29,12 +29,13 @@ class CovidCrawlerBase(ABC):
 
 
 class CovidCrawler(CovidCrawlerBase):
-    def __init__(self) -> None:
+    def __init__(self, hass) -> None:
         self.url = (
             "https://www.augsburg.de/umwelt-soziales/gesundheit/coronavirus/fallzahlen"
         )
+        self.hass = hass
 
-    def crawl(self) -> IncidenceData:
+    async def crawl(self) -> IncidenceData:
         """
         Fetch COVID-19 infection data from the target website.
         """
@@ -43,11 +44,8 @@ class CovidCrawler(CovidCrawlerBase):
 
         locale.setlocale(locale.LC_ALL, "de_DE.utf8")
 
-        result = requests.get(self.url)
-        if not result.ok:
-            result.raise_for_status()
-
-        soup = BeautifulSoup(result.text, features="html.parser")
+        result = await aiohttp_client.async_get_clientsession(self.hass).get(self.url)
+        soup = BeautifulSoup(await result.text(), features="html.parser")
 
         match = soup.find(class_="frame--type-textpic")
         text = match.p.text

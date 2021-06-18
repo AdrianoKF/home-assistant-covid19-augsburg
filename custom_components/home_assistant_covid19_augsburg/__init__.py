@@ -66,8 +66,8 @@ async def get_coordinator(hass):
         return hass.data[DOMAIN]
 
     async def async_get_data() -> IncidenceData:
-        crawler = CovidCrawler()
-        return crawler.crawl()
+        crawler = CovidCrawler(hass)
+        return await crawler.crawl()
 
     hass.data[DOMAIN] = DataUpdateCoordinator(
         hass,
