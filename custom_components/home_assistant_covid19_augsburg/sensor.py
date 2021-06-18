@@ -41,18 +41,18 @@ class CoronaAugsburgSensor(Entity):
 
     @property
     def state(self):
-        return self.coordinator.data.total_cases
+        return self.coordinator.data
 
-    @property
-    def device_state_attributes(self):
-        return {
-            "date": self.coordinator.data.date,
-            "total_cases": self.coordinator.data.total_cases,
-            "num_dead": self.coordinator.data.num_dead,
-            "num_recovered": self.coordinator.data.num_recovered,
-            "num_infected": self.coordinator.data.num_infected,
-            "incidence": self.coordinator.data.incidence,
-        }
+    # @property
+    # def device_state_attributes(self):
+    # return {
+    #     "date": self.coordinator.data.date,
+    #     "total_cases": self.coordinator.data.total_cases,
+    #     "num_dead": self.coordinator.data.num_dead,
+    #     "num_recovered": self.coordinator.data.num_recovered,
+    #     "num_infected": self.coordinator.data.num_infected,
+    #     "incidence": self.coordinator.data.incidence,
+    # }
 
     async def async_added_to_hass(self):
         """When entity is added to hass."""
