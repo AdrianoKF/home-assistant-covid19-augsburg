@@ -18,7 +18,7 @@ def parse_num(s, t=int):
 @dataclass
 class IncidenceData:
     location: str
-    date: datetime.date
+    date: str
     incidence: float
     total_cases: int = 0
     num_infected: int = 0
@@ -122,7 +122,9 @@ class CovidCrawler(CovidCrawlerBase):
                 }
             )
 
-        result = IncidenceData("Augsburg", incidence=incidence, date=date, **cases)
+        result = IncidenceData(
+            "Augsburg", incidence=incidence, date=date.strftime("%Y-%m-%d"), **cases
+        )
         _log.debug(f"Result data: {result}")
 
-        return result
+        return {}
