@@ -1,5 +1,6 @@
-from . import get_coordinator
 from homeassistant.helpers.entity import Entity
+
+from . import get_coordinator
 
 
 async def async_setup_entry(hass, _, async_add_entities):

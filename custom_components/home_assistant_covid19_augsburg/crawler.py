@@ -122,7 +122,7 @@ class CovidCrawler(CovidCrawlerBase):
                 }
             )
 
-        result = IncidenceData("Augsburg", incidence, date, **cases)
+        result = IncidenceData("Augsburg", incidennce=incidence, date=date, **cases)
         _log.debug(f"Result data: {result}")
 
         return result
