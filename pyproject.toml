@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "git add re"
+version = "0.1.0"
+description = ""
+authors = ["Adrian Rumpold <a.rumpold@gmail.com>"]
+packages = [
+    { include = "home_assistant_covid19_augsburg", from = "custom_components" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+beautifulsoup4 = "^4.9.3"
+requests = "^2.25.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+flake8 = "^3.9.2"
+homeassistant = "^2021.6.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3

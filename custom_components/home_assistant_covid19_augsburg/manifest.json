@@ -1,0 +1,10 @@
+{
+    "domain": "covid19_augsburg",
+    "name": "COVID-19 Augsburg",
+    "version": "0.1.0",
+    "config_flow": true,
+    "documentation": "https://github.com/AdrianoKF/home-assistant-covid19-augsburg",
+    "requirements": ["beautifulsoup4==4.8.2", "requests==2.25.1"],
+    "dependencies": [],
+    "codeowners": ["@AdrianoKF"]
+  }
