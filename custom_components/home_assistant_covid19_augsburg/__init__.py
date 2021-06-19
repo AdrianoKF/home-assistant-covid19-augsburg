@@ -76,7 +76,7 @@ async def get_coordinator(hass: HomeAssistant):
         logging.getLogger(__name__),
         name=DOMAIN,
         update_method=async_get_data,
-        update_interval=timedelta(hours=6),
+        update_interval=timedelta(hours=1),
     )
     await hass.data[DOMAIN].async_refresh()
     return hass.data[DOMAIN]
