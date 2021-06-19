@@ -1,13 +1,15 @@
-"""The corona_hessen component."""
+"""The covid19_augsburg component."""
+
+from __future__ import annotations
 
 import asyncio
 import logging
-import re
 from datetime import timedelta
+from typing import TYPE_CHECKING
 
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+if TYPE_CHECKING:
+    from homeassistant.config_entries import ConfigEntry
+    from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
 from .crawler import CovidCrawler, IncidenceData
@@ -17,8 +19,6 @@ _LOGGER = logging.getLogger(__name__)
 __version__ = "0.1.0"
 
 PLATFORMS = ["sensor"]
-
-HYPHEN_PATTERN = re.compile(r"- (.)")
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
@@ -60,7 +60,9 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     return unload_ok
 
 
-async def get_coordinator(hass):
+async def get_coordinator(hass: HomeAssistant):
+    from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+
     """Get the data update coordinator."""
     if DOMAIN in hass.data:
         return hass.data[DOMAIN]
