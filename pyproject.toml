@@ -16,6 +16,8 @@ requests = "^2.25.1"
 pytest = "^5.2"
 flake8 = "^3.9.2"
 homeassistant = "^2021.6.5"
+black = "^21.6b0"
+isort = "^5.8.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
