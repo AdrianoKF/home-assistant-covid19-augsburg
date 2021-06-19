@@ -1,11 +1,13 @@
 from .crawler import CovidCrawler
 
 
-def main():
+async def main():
     crawler = CovidCrawler()
-    result = crawler.crawl()
+    result = await crawler.crawl()
     print(result)
 
 
 if __name__ == "__main__":
-    main()
+    import asyncio
+
+    asyncio.run(main())
