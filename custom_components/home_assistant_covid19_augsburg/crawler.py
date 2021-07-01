@@ -67,15 +67,17 @@ class CovidCrawler(CovidCrawlerBase):
 
         matches = re.search(r"(\d+,\d+)\sNeuinfektion", text)
         if not matches:
-            raise ValueError("Could not extract incidence from scraped web page")
+            raise ValueError(
+                f"Could not extract incidence from scraped web page, {text=}"
+            )
 
         incidence = parse_num(matches.group(1), t=float)
         _log.debug(f"Parsed incidence: {incidence}")
 
         text = match.h2.text
-        matches = re.search(r"\((\d+)\. (\w+)\)", text)
+        matches = re.search(r"\((\d+)\. (\w+).*\)", text)
         if not matches:
-            raise ValueError("Could not extract date from scraped web page")
+            raise ValueError(f"Could not extract date from scraped web page, {text=}")
 
         months = [
             "Januar",
