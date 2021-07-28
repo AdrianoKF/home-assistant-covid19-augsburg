@@ -39,6 +39,7 @@ jobs:
         poetry-version: 1.1.7
     - name: Install dependencies
       run: |
+        poetry config virtualenvs.in-project true
         poetry install
     - name: Lint with flake8
       run: |
