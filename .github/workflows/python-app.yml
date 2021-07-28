@@ -36,9 +36,9 @@ jobs:
         # A list of files, directories, and wildcard patterns to cache and restore
         path: .venv
         # An explicit key for restoring and saving the cache
-        key: venv-cache-${{hashfiles("poetry.lock")}}
+        key: venv-cache-${{hashFiles('**/poetry.lock')}}
         restore-keys: |
-          venv-cache-${{hashfiles("poetry.lock")}}
+          venv-cache-${{hashFiles('**/poetry.lock')}}
           venv-cache-
     - name: Lint with flake8
       run: |
