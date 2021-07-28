@@ -1,0 +1,52 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python application
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Cache
+      uses: actions/cache@v2.1.6
+      with:
+        # A list of files, directories, and wildcard patterns to cache and restore
+        path: .venv
+        # An explicit key for restoring and saving the cache
+        key: venv-cache-${{hashFiles('**/poetry.lock')}}
+        restore-keys: |
+          venv-cache-${{hashFiles('**/poetry.lock')}}
+          venv-cache-
+    - name: Python Poetry Action
+      # You may pin to the exact commit or the version.
+      # uses: abatilo/actions-poetry@8284d202bc272a8d0597e26e1c0b4a0d0c73db93
+      uses: abatilo/actions-poetry@v2.1.0
+      with:
+        # The version of poetry to install
+        poetry-version: 1.1.7
+    - name: Install dependencies
+      run: |
+        poetry config virtualenvs.in-project true
+        poetry install
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        poetry run flake8 . --count --exclude .git,.venv --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        poetry run flake8 . --count --exclude .git,.venv  --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
+      run: |
+        poetry run pytest
