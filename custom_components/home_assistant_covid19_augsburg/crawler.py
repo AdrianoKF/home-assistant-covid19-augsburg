@@ -97,8 +97,7 @@ class CovidCrawler(CovidCrawlerBase):
             import requests
 
             result = requests.get(url)
-            if not result.ok:
-                result.raise_for_status()
+            result.raise_for_status()
             soup = BeautifulSoup(result.text, "html.parser")
 
         match = soup.find(class_="frame--type-textpic")
@@ -153,7 +152,9 @@ class CovidCrawler(CovidCrawlerBase):
 
     async def crawl_vaccination(self) -> VaccinationData:
         _log.info("Fetching COVID-19 vaccination data update")
-        url = "https://www.augsburg.de/umwelt-sozgcoiales/gesundheit/coronavirus/impfzentrum"
+        url = (
+            "https://www.augsburg.de/umwelt-soziales/gesundheit/coronavirus/impfzentrum"
+        )
         container_id = "c1088140"
 
         if self.hass:
@@ -165,8 +166,7 @@ class CovidCrawler(CovidCrawlerBase):
             import requests
 
             result = requests.get(url)
-            if not result.ok:
-                result.raise_for_status()
+            result.raise_for_status()
             soup = BeautifulSoup(result.text, "html.parser")
 
         result = soup.find(id=container_id)
