@@ -32,12 +32,14 @@ entities:
         name: Once
         format: precision1
         unit: '%'
-      - attribute: num_vaccinated_full
+      - attribute: ratio_vaccinated_full
         name: Fully
         format: precision1
         unit: '%'
-      - attribute: total_vaccinations
-        name: Total doses
+      - attribute: ratio_vaccinated_total
+        name: Total
+        format: precision1
+        unit: '%'
     show_state: false
     icon: mdi:biohazard
     name: COVID-19 Vaccinations
