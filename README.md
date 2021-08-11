@@ -41,7 +41,7 @@ entities:
         format: precision1
         unit: '%'
     show_state: false
-    icon: mdi:biohazard
+    icon: mdi:needle
     name: COVID-19 Vaccinations
     secondary_info:
       attribute: date

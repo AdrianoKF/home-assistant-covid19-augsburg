@@ -87,7 +87,7 @@ class CoronaAugsburgVaccinationSensor(Entity):
 
     @property
     def icon(self):
-        return "mdi:biohazard"
+        return "mdi:needle"
 
     @property
     def unit_of_measurement(self):
