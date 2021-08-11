@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
-from .crawler import CovidCrawler, IncidenceData
+from .crawler import CovidCrawler
 
 _LOGGER = logging.getLogger(__name__)
 

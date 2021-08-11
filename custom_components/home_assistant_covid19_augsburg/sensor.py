@@ -9,7 +9,12 @@ async def async_setup_entry(hass, _, async_add_entities):
     """Defer sensor setup to the shared sensor module."""
     coordinator = await get_coordinator(hass)
 
-    async_add_entities([CoronaAugsburgSensor(coordinator)])
+    async_add_entities(
+        [
+            CoronaAugsburgSensor(coordinator),
+            CoronaAugsburgVaccinationSensor(coordinator),
+        ]
+    )
 
 
 class CoronaAugsburgSensor(Entity):
