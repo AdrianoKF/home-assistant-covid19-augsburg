@@ -194,8 +194,8 @@ class CovidCrawler(CovidCrawlerBase):
         # https://www.augsburg.de/fileadmin/user_upload/buergerservice_rathaus/rathaus/statisiken_und_geodaten/statistiken/Monitoring/Demografiemonitoring_der_Stadt_Augsburg_2021.pdf
         population = 299021
 
-        result.ratio_vaccinated_full = result.num_vaccinated_full / population
-        result.ratio_vaccinated_once = result.num_vaccinated_once / population
+        result.ratio_vaccinated_full = result.num_vaccinated_full / population * 100
+        result.ratio_vaccinated_once = result.num_vaccinated_once / population * 100
         _log.debug(f"Result data: {result}")
 
         return result
