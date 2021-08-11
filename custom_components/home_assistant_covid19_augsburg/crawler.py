@@ -78,16 +78,9 @@ class CovidCrawler(CovidCrawlerBase):
     def __init__(self, hass=None) -> None:
         self.hass = hass
 
-    async def crawl_incidence(self) -> IncidenceData:
-        """
-        Fetch COVID-19 infection data from the target website.
-        """
+    async def _fetch(self, url: str) -> str:
+        """Fetch a URL, using either the current Home Assistant instance or requests"""
 
-        _log.info("Fetching COVID-19 data update")
-
-        url = (
-            "https://www.augsburg.de/umwelt-soziales/gesundheit/coronavirus/fallzahlen"
-        )
         if self.hass:
             from homeassistant.helpers import aiohttp_client
 
@@ -99,6 +92,19 @@ class CovidCrawler(CovidCrawlerBase):
             result = requests.get(url)
             result.raise_for_status()
             soup = BeautifulSoup(result.text, "html.parser")
+        return soup
+
+    async def crawl_incidence(self) -> IncidenceData:
+        """
+        Fetch COVID-19 infection data from the target website.
+        """
+
+        _log.info("Fetching COVID-19 data update")
+
+        url = (
+            "https://www.augsburg.de/umwelt-soziales/gesundheit/coronavirus/fallzahlen"
+        )
+        soup = await self._fetch(url)
 
         match = soup.find(class_="frame--type-textpic")
         text = match.p.text
@@ -155,20 +161,9 @@ class CovidCrawler(CovidCrawlerBase):
         url = (
             "https://www.augsburg.de/umwelt-soziales/gesundheit/coronavirus/impfzentrum"
         )
+        soup = await self._fetch(url)
+
         container_id = "c1088140"
-
-        if self.hass:
-            from homeassistant.helpers import aiohttp_client
-
-            result = await aiohttp_client.async_get_clientsession(self.hass).get(url)
-            soup = BeautifulSoup(await result.text(), "html.parser")
-        else:
-            import requests
-
-            result = requests.get(url)
-            result.raise_for_status()
-            soup = BeautifulSoup(result.text, "html.parser")
-
         result = soup.find(id=container_id)
         text = re.sub(r"\s+", " ", result.text)
         regexes = [
