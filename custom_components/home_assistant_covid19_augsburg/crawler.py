@@ -62,6 +62,7 @@ class VaccinationData:
 
     ratio_vaccinated_once: float = 0.0
     ratio_vaccinated_full: float = 0.0
+    ratio_vaccinated_total: float = 0.0
 
 
 class CovidCrawlerBase(ABC):
@@ -196,6 +197,9 @@ class CovidCrawler(CovidCrawlerBase):
 
         result.ratio_vaccinated_full = result.num_vaccinated_full / population * 100
         result.ratio_vaccinated_once = result.num_vaccinated_once / population * 100
+        result.ratio_vaccinated_total = (
+            result.ratio_vaccinated_once + result.ratio_vaccinated_full
+        )
         _log.debug(f"Result data: {result}")
 
         return result
