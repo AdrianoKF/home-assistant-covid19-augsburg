@@ -67,9 +67,12 @@ async def get_coordinator(hass: HomeAssistant):
     if DOMAIN in hass.data:
         return hass.data[DOMAIN]
 
-    async def async_get_data() -> IncidenceData:
+    async def async_get_data() -> dict:
         crawler = CovidCrawler(hass)
-        return await crawler.crawl_incidence()
+        return {
+            "incidence": await crawler.crawl_incidence(),
+            "vaccination": await crawler.crawl_vaccination(),
+        }
 
     hass.data[DOMAIN] = DataUpdateCoordinator(
         hass,
