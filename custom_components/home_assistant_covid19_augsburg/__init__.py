@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
-from .crawler import CovidCrawler, IncidenceData
+from .crawler import CovidCrawler
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -67,9 +67,12 @@ async def get_coordinator(hass: HomeAssistant):
     if DOMAIN in hass.data:
         return hass.data[DOMAIN]
 
-    async def async_get_data() -> IncidenceData:
+    async def async_get_data() -> dict:
         crawler = CovidCrawler(hass)
-        return await crawler.crawl()
+        return {
+            "incidence": await crawler.crawl_incidence(),
+            "vaccination": await crawler.crawl_vaccination(),
+        }
 
     hass.data[DOMAIN] = DataUpdateCoordinator(
         hass,

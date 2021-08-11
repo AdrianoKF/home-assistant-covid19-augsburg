@@ -3,5 +3,6 @@
 TODO: Remove once other tests have been added.
 """
 
+
 def test_example():
-  assert True
+    assert True
