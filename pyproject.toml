@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "git add re"
+name = "home_assistant_covid19_augsburg"
 version = "0.1.0"
 description = ""
 authors = ["Adrian Rumpold <a.rumpold@gmail.com>"]
