@@ -107,8 +107,8 @@ class CovidCrawler(CovidCrawlerBase):
         )
         soup = await self._fetch(url)
 
-        match = soup.find(class_="frame--type-textpic")
-        text = match.p.text
+        match = soup.find(id="c1067628")
+        text = match.text.strip()
         _log.debug(f"Infection data text: {text}")
 
         matches = re.search(r"(\d+,\d+)\sNeuinfektion", text)
@@ -120,17 +120,14 @@ class CovidCrawler(CovidCrawlerBase):
         incidence = parse_num(matches.group(1), t=float)
         _log.debug(f"Parsed incidence: {incidence}")
 
-        text = match.h2.text
-        matches = re.search(r"\((\d+)\. (\w+).*\)", text)
+        match = soup.find(id="c1052517")
+        text = match.text.strip()
+        matches = re.search(r"Stand: (\d+)\. (\w+) (\d{4})", text)
         if not matches:
             raise ValueError(f"Could not extract date from scraped web page, {text=}")
 
-        date = parse_date(matches.group(1), matches.group(2))
+        date = parse_date(matches.group(1), matches.group(2), matches.group(3))
         _log.debug(f"Parsed date: {date}")
-
-        match = match.find_next_sibling(class_="frame--type-textpic")
-        text = match.text
-        _log.debug(f"Infection counts text: {text}")
 
         regexes = [
             r"Insgesamt: (?P<total_cases>[0-9.]+)",
