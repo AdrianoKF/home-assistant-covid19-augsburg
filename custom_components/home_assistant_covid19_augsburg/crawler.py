@@ -111,7 +111,7 @@ class CovidCrawler(CovidCrawlerBase):
         text = match.text.strip()
         _log.debug(f"Infection data text: {text}")
 
-        matches = re.search(r"(\d+,\d+)\sNeuinfektion", text)
+        matches = re.search(r"(\d+(,\d+)?)\sNeuinfektion", text)
         if not matches:
             raise ValueError(
                 f"Could not extract incidence from scraped web page, {text=}"
