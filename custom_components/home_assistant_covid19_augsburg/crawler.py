@@ -59,10 +59,12 @@ class VaccinationData:
     total_vaccinations: int = 0
     num_vaccinated_once: int = 0
     num_vaccinated_full: int = 0
+    num_vaccinated_booster: int = 0
 
     ratio_vaccinated_once: float = 0.0
     ratio_vaccinated_full: float = 0.0
     ratio_vaccinated_total: float = 0.0
+    ratio_vaccinated_booster: float = 0.0
 
 
 class CovidCrawlerBase(ABC):
@@ -165,9 +167,9 @@ class CovidCrawler(CovidCrawlerBase):
         result = soup.find(id=container_id)
         text = re.sub(r"\s+", " ", result.text)
         regexes = [
-            r"(?P<total_vaccinations>\d+[.]\d+) Impfdosen",
-            r"Weitere (?P<num_vaccinated_once>\d+[.]\d+) Personen haben die Erstimpfung erhalten",
-            r"(?P<num_vaccinated_full>\d+[.]\d+) Personen sind bereits vollständig geimpft",
+            r"(?P<total_vaccinations>\d+([.]\d+)?) Personen in Augsburg mindestens",
+            r"(?P<num_vaccinated_full>\d+([.]\d+)?) Personen sind mindestens zweimal geimpft",
+            r"(?P<num_vaccinated_booster>\d+([.]\d+)?) Personen haben eine Auffrischungsimpfung",
         ]
         values = {}
         for r in regexes:
@@ -185,17 +187,23 @@ class CovidCrawler(CovidCrawlerBase):
         if not matches:
             raise ValueError(f"Could not extract date from scraped web page, {text=}")
 
+        values["num_vaccinated_once"] = values["total_vaccinations"] - (
+            values["num_vaccinated_full"] + values["num_vaccinated_booster"]
+        )
+
         values["date"] = parse_date(**matches.groupdict()).strftime("%Y-%m-%d")
         result = VaccinationData(**values)
 
-        # Total population in Augsburg as of 2020
-        # https://www.augsburg.de/fileadmin/user_upload/buergerservice_rathaus/rathaus/statisiken_und_geodaten/statistiken/Monitoring/Demografiemonitoring_der_Stadt_Augsburg_2021.pdf
-        population = 299021
+        # Total population in Augsburg as listed on the crawled page
+        population = 298014
 
         result.ratio_vaccinated_full = result.num_vaccinated_full / population * 100
         result.ratio_vaccinated_once = result.num_vaccinated_once / population * 100
         result.ratio_vaccinated_total = (
             result.ratio_vaccinated_once + result.ratio_vaccinated_full
+        )
+        result.ratio_vaccinated_booster = (
+            result.num_vaccinated_booster / population * 100
         )
         _log.debug(f"Result data: {result}")
 
