@@ -187,8 +187,8 @@ class CovidCrawler(CovidCrawlerBase):
         if not matches:
             raise ValueError(f"Could not extract date from scraped web page, {text=}")
 
-        values["num_vaccinated_once"] = values["total_vaccinations"] - (
-            values["num_vaccinated_full"] + values["num_vaccinated_booster"]
+        values["num_vaccinated_once"] = (
+            values["total_vaccinations"] - values["num_vaccinated_full"]
         )
 
         values["date"] = parse_date(**matches.groupdict()).strftime("%Y-%m-%d")
