@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "home_assistant_covid19_augsburg"
-version = "1.2.1"
+version = "1.2.2"
 description = ""
 authors = ["Adrian Rumpold <a.rumpold@gmail.com>"]
 packages = [

@@ -109,7 +109,7 @@ class CovidCrawler(CovidCrawlerBase):
         )
         soup = await self._fetch(url)
 
-        match = soup.find(id="c1067628")
+        match = soup.find(id="c1075340")
         text = match.text.strip()
         _log.debug(f"Infection data text: {text}")
 
@@ -167,9 +167,9 @@ class CovidCrawler(CovidCrawlerBase):
         result = soup.find(id=container_id)
         text = re.sub(r"\s+", " ", result.text)
         regexes = [
-            r"(?P<total_vaccinations>\d+([.]\d+)?) Personen in Augsburg mindestens",
-            r"(?P<num_vaccinated_full>\d+([.]\d+)?) Personen sind mindestens zweimal geimpft",
-            r"(?P<num_vaccinated_booster>\d+([.]\d+)?) Personen haben eine Auffrischungsimpfung",
+            r"(?P<total_vaccinations>\d+([.]\d+)?) Personen in Augsburg",
+            r"(?P<num_vaccinated_full>\d+([.]\d+)?) Personen in Augsburg",
+            r"(?P<num_vaccinated_booster>\d+([.]\d+)?) Personen, also",
         ]
         values = {}
         for r in regexes:
