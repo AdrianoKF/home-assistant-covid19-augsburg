@@ -16,7 +16,7 @@ from .crawler import CovidCrawler
 
 _LOGGER = logging.getLogger(__name__)
 
-__version__ = "1.2.2"
+__version__ = "1.3.0"
 
 PLATFORMS = ["sensor"]
 

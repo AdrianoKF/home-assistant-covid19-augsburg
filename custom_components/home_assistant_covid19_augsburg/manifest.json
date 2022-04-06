@@ -1,7 +1,7 @@
 {
   "domain": "covid19_augsburg",
   "name": "COVID-19 Augsburg",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "config_flow": true,
   "documentation": "https://github.com/AdrianoKF/home-assistant-covid19-augsburg",
   "issue_tracker": "https://github.com/AdrianoKF/home-assistant-covid19-augsburg/issues",
