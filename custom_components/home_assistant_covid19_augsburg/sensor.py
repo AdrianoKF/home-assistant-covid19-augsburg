@@ -51,7 +51,7 @@ class CoronaAugsburgSensor(Entity):
         return self.coordinator.data["incidence"].incidence
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         data = self.coordinator.data["incidence"]
         return asdict(data)
 
@@ -98,7 +98,7 @@ class CoronaAugsburgVaccinationSensor(Entity):
         return self.coordinator.data["vaccination"].total_vaccinations
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         data = self.coordinator.data["vaccination"]
         return asdict(data)
 
